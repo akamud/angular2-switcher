@@ -41,9 +41,15 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
 
-        vscode.workspace.openTextDocument(targetFile).then((value) => {
-            vscode.window.showTextDocument(value);
-        });
+        vscode.workspace.openTextDocument(targetFile)
+            .then(
+                (value) => {
+                    vscode.window.showTextDocument(value);
+                }, 
+                (err) => {
+                    // console.log(err);
+                }
+            );
     });
 
     context.subscriptions.push(disposable);
