@@ -2,7 +2,7 @@
     "name": "angular2-switcher",
     "displayName": "angular2-switcher",
     "description": "Switch .ts/.html in angular2 project.",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "publisher": "infinity1207",
     "engines": {
         "vscode": "^1.5.0"
