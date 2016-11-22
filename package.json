@@ -2,7 +2,7 @@
     "name": "angular2-switcher",
     "displayName": "angular2-switcher",
     "description": "Switch .ts/.html in angular2 project.",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "publisher": "infinity1207",
     "engines": {
         "vscode": "^1.5.0"
@@ -12,20 +12,40 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.switch"
+        "onCommand:extension.switchTemplate",
+        "onCommand:extension.switchStyle",
+        "onCommand:extension.switchTS"
     ],
     "main": "./out/src/extension",
     "contributes": {
         "commands": [
             {
-                "command": "extension.switch",
-                "title": "Open Corresponding File"
+                "command": "extension.switchTemplate",
+                "title": "Open Corresponding template(html) File"
+            },
+            {
+                "command": "extension.switchStyle",
+                "title": "Open Corresponding style(scss/sass/css) File"
+            },
+            {
+                "command": "extension.switchTS",
+                "title": "Open Corresponding typescript(ts) File"
             }
         ],
         "keybindings": [
             {
-                "command": "extension.switch",
+                "command": "extension.switchTemplate",
                 "key": "alt+o",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "extension.switchStyle",
+                "key": "alt+i",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "extension.switchTS",
+                "key": "alt+u",
                 "when": "editorTextFocus"
             }
         ]
