@@ -71,8 +71,13 @@ export function activate(context: vscode.ExtensionContext) {
             targetFile = fileNameWithoutExtension + '.html';
         }
         else if (fileIs(currentFile, '.html')) {
-            if (previous) {
-                targetFile = previous;
+            if (previous && previous !== currentFile) {
+                if (previous.startsWith(fileNameWithoutExtension)) {
+                    targetFile = previous;
+                }
+                else {
+                    targetFile = fileNameWithoutExtension + '.ts';
+                }
             }
             else {
                 targetFile = fileNameWithoutExtension + '.ts';
@@ -108,8 +113,13 @@ export function activate(context: vscode.ExtensionContext) {
             targetFile = fileNameWithoutExtension + '.ts';
         }
         else if (fileIs(currentFile, '.ts')) {
-            if (previous) {
-                targetFile = previous
+            if (previous && previous !== currentFile) {
+                if (previous.startsWith(fileNameWithoutExtension)) {
+                    targetFile = previous;
+                }
+                else {
+                    targetFile = fileNameWithoutExtension + '.html';
+                }
             }
             else {
                 targetFile = fileNameWithoutExtension + '.html';
@@ -141,8 +151,13 @@ export function activate(context: vscode.ExtensionContext) {
         let fileNameWithoutExtension = currentFile.slice(0, currentFile.lastIndexOf('.'));
         var targetFile: string[] = [];
         if (fileIs(currentFile, 'scss', 'sass', 'css')) {
-            if (previous) {
-                targetFile.push(previous);
+            if (previous && previous !== currentFile) {
+                if (previous.startsWith(fileNameWithoutExtension)) {
+                    targetFile.push(previous);
+                }
+                else {
+                    targetFile.push(fileNameWithoutExtension + '.html');
+                }
             }
             else {
                 targetFile.push(fileNameWithoutExtension + '.html');

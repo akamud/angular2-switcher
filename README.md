@@ -1,6 +1,9 @@
 # angular2-switcher
 Easily navigate to `typescript(.ts)`|`template(.html)`|`style(.scss/.sass/.css)` in angular2 project.
 
+## Source
+[GitHub](https://github.com/infinity1207/angular2-switcher)
+
 ## Usage
 #### `alt+o`
 * if on ts : go to html
@@ -18,6 +21,9 @@ Easily navigate to `typescript(.ts)`|`template(.html)`|`style(.scss/.sass/.css)`
 * if on ts: go to previous (css or html)
 
 ## Release Notes
+### 0.0.6
+Always trigger shortcuts in anywhere.
+
 ### 0.0.5
 Modify README format.
 

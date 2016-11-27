@@ -1,8 +1,8 @@
 {
     "name": "angular2-switcher",
     "displayName": "angular2-switcher",
-    "description": "Switch .ts/.html in angular2 project.",
-    "version": "0.0.5",
+    "description": "Easily navigate to component's files in angular2 project.",
+    "version": "0.0.6",
     "publisher": "infinity1207",
     "engines": {
         "vscode": "^1.5.0"
@@ -35,18 +35,15 @@
         "keybindings": [
             {
                 "command": "extension.switchTemplate",
-                "key": "alt+o",
-                "when": "editorTextFocus"
+                "key": "alt+o"
             },
             {
                 "command": "extension.switchStyle",
-                "key": "alt+i",
-                "when": "editorTextFocus"
+                "key": "alt+i"
             },
             {
                 "command": "extension.switchTS",
-                "key": "alt+u",
-                "when": "editorTextFocus"
+                "key": "alt+u"
             }
         ]
     },
