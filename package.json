@@ -35,15 +35,18 @@
         "keybindings": [
             {
                 "command": "extension.switchTemplate",
-                "key": "alt+o"
+                "key": "alt+o",
+                "mac": "shift+alt+o"
             },
             {
                 "command": "extension.switchStyle",
-                "key": "alt+i"
+                "key": "alt+i",
+                "mac": "shift+alt+i"
             },
             {
                 "command": "extension.switchTS",
-                "key": "alt+u"
+                "key": "alt+u",
+                "mac": "shift+alt+u"
             }
         ]
     },
