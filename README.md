@@ -5,22 +5,25 @@ Easily navigate to `typescript(.ts)`|`template(.html)`|`style(.scss/.sass/.css)`
 [GitHub](https://github.com/infinity1207/angular2-switcher)
 
 ## Usage
-#### `alt+o`
+#### `alt+o`(Windows) `shift+alt+o`(macOS)
 * if on ts : go to html
 * if on css : go to html
 * if on html: go to previous (ts or css)
 
-#### `alt+i`
+#### `alt+i`(Windows) `shift+alt+i`(macOS)
 * if on ts : go to css
 * if on html : go to css
 * if on css: go to previous (ts or html)
 
-#### `alt+u`
+#### `alt+u`(Windows) `shift+alt+u`(macOS)
 * if on css : go to ts
 * if on html : go to ts
 * if on ts: go to previous (css or html)
 
 ## Release Notes
+### 0.0.7
+Change default key bindings in macOS.
+
 ### 0.0.6
 Always trigger shortcuts in anywhere.
 
