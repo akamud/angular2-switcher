@@ -3,6 +3,69 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
+const HTML_MODE: vscode.DocumentFilter = { language: 'html', scheme: 'file' };
+
+const HTML_TAGS: string[] = [
+    'html', 'head', 'body',
+    'script', 'style',
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'div', 'p', 'a', 'img',
+    'table', 'thead', 'tbody',  'th', 'tr', 'td',
+    'form', 'input', 'label', 'button',
+    'class', 'id', 'src',
+    'click', 'mousemove',
+];
+
+class HTMLDefinitionProvider implements vscode.DefinitionProvider {
+    public provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken) : Thenable<vscode.Location> {
+        return new Promise((resolve, reject) => {
+            let range = document.getWordRangeAtPosition(position);
+            let word = document.getText(range);
+            let wordType = 0;       // 0: property, 1: function
+
+            // check word as function or property.
+            if (HTML_TAGS.findIndex(tag => tag === word.toLowerCase()) >= 0) {
+                console.log(`${word} is html tag.`);
+                resolve();
+            }
+
+            // if next character is '(', so word is function
+            if (document.getText(new vscode.Range(range.end, range.end.translate(0, 1))) === '(') {
+                wordType = 1;
+            }
+            // console.log(`wordType: ${wordType}`);
+
+            // find function in ts
+            var htmlFile = document.fileName;
+            let fileNameWithoutExtension = htmlFile.slice(0, htmlFile.lastIndexOf('.'));
+            var tsFile = fileNameWithoutExtension + '.ts';
+            let tsUri = vscode.Uri.file(tsFile);
+            vscode.workspace.openTextDocument(tsFile).then((tsDoc) => {
+                let lineCount = tsDoc.lineCount;
+                for (var index = 0; index < tsDoc.lineCount; index++) {
+                    let line = tsDoc.lineAt(index);
+                    if (line.isEmptyOrWhitespace) {
+                        continue;
+                    }
+                    let pattern: string;
+                    if (wordType === 0) {               // property
+                        pattern = `[^\.]${word}`;
+                    }
+                    else {                              // function
+                        pattern = `[^\.]${word}\(.*\)`;
+                    }
+                    let rgx = new RegExp(pattern);
+                    if (rgx.test(line.text))
+                    {
+                        resolve(new vscode.Location(tsUri, new vscode.Position(index, line.firstNonWhitespaceCharacterIndex)));
+                    }
+                }
+                resolve();
+            });
+        });
+    }
+}
+
 function fileIs(path: string, ...items: string[]) : boolean {
     if (!items) {
         return false;
@@ -20,13 +83,13 @@ function fileIs(path: string, ...items: string[]) : boolean {
 }
 
 let previous = '';
-function openTextDocument(path: string): Promise<any> {
+function openTextDocument(path: string): Promise<vscode.TextDocument> {
     return new Promise((resolve, reject) =>{
         vscode.workspace.openTextDocument(path)
             .then(
-                (value) => {
-                    vscode.window.showTextDocument(value).then(() => {
-                        resolve();
+                (doc) => {
+                    vscode.window.showTextDocument(doc).then(() => {
+                        resolve(doc);
                     }, (err) => {
                         reject(err);
                     });
@@ -45,6 +108,11 @@ export function activate(context: vscode.ExtensionContext) {
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "angular2-switcher" is now active!');
+
+    context.subscriptions.push(
+        vscode.languages.registerDefinitionProvider(
+            HTML_MODE, new HTMLDefinitionProvider())
+    );
 
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
