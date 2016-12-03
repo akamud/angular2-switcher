@@ -2,7 +2,7 @@
     "name": "angular2-switcher",
     "displayName": "angular2-switcher",
     "description": "Easily navigate to component's files in angular2 project.",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "publisher": "infinity1207",
     "engines": {
         "vscode": "^1.5.0"
@@ -12,9 +12,7 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.switchTemplate",
-        "onCommand:extension.switchStyle",
-        "onCommand:extension.switchTS"
+        "*"
     ],
     "main": "./out/src/extension",
     "contributes": {

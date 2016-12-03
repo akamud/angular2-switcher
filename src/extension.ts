@@ -9,10 +9,11 @@ const HTML_TAGS: string[] = [
     'html', 'head', 'body',
     'script', 'style',
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-    'div', 'p', 'a', 'img',
-    'table', 'thead', 'tbody',  'th', 'tr', 'td',
+    'div', 'p', 'a', 'img', 'span', 'strong', 'em',
+    'table', 'thead', 'tbody', 'th', 'tr', 'td',
+    'ul', 'li', 'ol', 'dl', 'dt', 'dd',
     'form', 'input', 'label', 'button',
-    'class', 'id', 'src',
+    'class', 'id', 'src', 'href',
     'click', 'mousemove',
 ];
 
@@ -52,7 +53,7 @@ class HTMLDefinitionProvider implements vscode.DefinitionProvider {
                         pattern = `[^\.]${word}`;
                     }
                     else {                              // function
-                        pattern = `[^\.]${word}\(.*\)`;
+                        pattern = `[^\.]${word}\\(.*\\)`;
                     }
                     let rgx = new RegExp(pattern);
                     if (rgx.test(line.text))
