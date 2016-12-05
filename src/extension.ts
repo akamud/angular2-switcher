@@ -35,12 +35,22 @@ class HTMLDefinitionProvider implements vscode.DefinitionProvider {
                 wordType = 1;
             }
             // console.log(`wordType: ${wordType}`);
+            let pattern: string;
+            if (wordType === 0) {               // property
+                pattern = `^\\s*${word}`;
+            }
+            else {                              // function
+                pattern = `^\\s*${word}\\(.*\\)`;
+            }
+            let rgx = new RegExp(pattern);
 
             // find function in ts
             var htmlFile = document.fileName;
             let fileNameWithoutExtension = htmlFile.slice(0, htmlFile.lastIndexOf('.'));
             var tsFile = fileNameWithoutExtension + '.ts';
             let tsUri = vscode.Uri.file(tsFile);
+            let enterClass = false;
+
             vscode.workspace.openTextDocument(tsFile).then((tsDoc) => {
                 let lineCount = tsDoc.lineCount;
                 for (var index = 0; index < tsDoc.lineCount; index++) {
@@ -48,14 +58,13 @@ class HTMLDefinitionProvider implements vscode.DefinitionProvider {
                     if (line.isEmptyOrWhitespace) {
                         continue;
                     }
-                    let pattern: string;
-                    if (wordType === 0) {               // property
-                        pattern = `[^\.]${word}`;
+                    if (!enterClass) {
+                        if (line.text.match(/\s+class\s+/)) {
+                            enterClass = true;
+                        }
+                        continue;
                     }
-                    else {                              // function
-                        pattern = `[^\.]${word}\\(.*\\)`;
-                    }
-                    let rgx = new RegExp(pattern);
+
                     if (rgx.test(line.text))
                     {
                         resolve(new vscode.Location(tsUri, new vscode.Position(index, line.firstNonWhitespaceCharacterIndex)));
