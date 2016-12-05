@@ -26,7 +26,7 @@ class HTMLDefinitionProvider implements vscode.DefinitionProvider {
 
             // check word as function or property.
             if (HTML_TAGS.findIndex(tag => tag === word.toLowerCase()) >= 0) {
-                console.log(`${word} is html tag.`);
+                // console.log(`${word} is html tag.`);
                 resolve();
             }
 
@@ -35,26 +35,27 @@ class HTMLDefinitionProvider implements vscode.DefinitionProvider {
                 wordType = 1;
             }
             // console.log(`wordType: ${wordType}`);
+
             let pattern: string;
             if (wordType === 0) {               // property
-                pattern = `^\\s*${word}`;
+                pattern = `^\\s*(private\\s+)?(${word})|^\\s*(public\\s+)?(${word})|^\\s*(protected\\s+)?(${word})`;
             }
             else {                              // function
-                pattern = `^\\s*${word}\\(.*\\)`;
+                pattern = `^\\s*(private\\s+)?(${word})\\(.*\\)|^\\s*(public\\s+)?(${word})\\(.*\\)|^\\s*(protected\\s+)?(${word})\\(.*\\)`;
             }
             let rgx = new RegExp(pattern);
 
-            // find function in ts
-            var htmlFile = document.fileName;
+            // find function|property in ts
+            let htmlFile = document.fileName;
             let fileNameWithoutExtension = htmlFile.slice(0, htmlFile.lastIndexOf('.'));
-            var tsFile = fileNameWithoutExtension + '.ts';
+            let tsFile = fileNameWithoutExtension + '.ts';
             let tsUri = vscode.Uri.file(tsFile);
             let enterClass = false;
 
             vscode.workspace.openTextDocument(tsFile).then((tsDoc) => {
                 let lineCount = tsDoc.lineCount;
-                for (var index = 0; index < tsDoc.lineCount; index++) {
-                    let line = tsDoc.lineAt(index);
+                for (var li = 0; li < tsDoc.lineCount; li++) {
+                    let line = tsDoc.lineAt(li);
                     if (line.isEmptyOrWhitespace) {
                         continue;
                     }
@@ -65,9 +66,11 @@ class HTMLDefinitionProvider implements vscode.DefinitionProvider {
                         continue;
                     }
 
-                    if (rgx.test(line.text))
+                    let m = line.text.match(rgx);
+                    if (m && m.length > 0)
                     {
-                        resolve(new vscode.Location(tsUri, new vscode.Position(index, line.firstNonWhitespaceCharacterIndex)));
+                        let pos = line.text.indexOf(word);
+                        resolve(new vscode.Location(tsUri, new vscode.Position(li, pos)));
                     }
                 }
                 resolve();
