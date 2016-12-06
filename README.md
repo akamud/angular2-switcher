@@ -5,7 +5,7 @@ Easily navigate to `typescript(.ts)`|`template(.html)`|`style(.scss/.sass/.css)`
 * Go to the definition of variables/functions when press `f12` within html.
 
 * Switch `.ts`|`.html`|`.scss` fastly. 
-	* alt+o`(Windows) `shift+alt+o`(macOS)
+	* `alt+o`(Windows) `shift+alt+o`(macOS)
       ```
 	  if on ts: go to html
 	  if on css: go to html
