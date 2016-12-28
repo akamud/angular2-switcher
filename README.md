@@ -1,5 +1,5 @@
 # angular2-switcher
-Easily navigate to `typescript(.ts)`|`template(.html)`|`style(.scss/.sass/.css)` in angular2 project.
+Easily navigate to `typescript(.ts)`|`template(.html)`|`style(.scss/.sass/.less/.css)` in angular2 project.
 
 ## Usage
 * Go to the definition of variables/functions when press `f12` within html.
@@ -27,8 +27,8 @@ Easily navigate to `typescript(.ts)`|`template(.html)`|`style(.scss/.sass/.css)`
       ```
 
 ## Release Notes
-### 0.1.0(2016-12-6)
-Support go to the definition of variables/functions when press `f12` within html.
+### 0.1.2(2016-12-28)
+Add support for .less files for style.
 
 ## Source
 [GitHub](https://github.com/infinity1207/angular2-switcher)
