@@ -148,7 +148,7 @@ export function activate(context: vscode.ExtensionContext) {
         var currentFile = editor.document.fileName;
         let fileNameWithoutExtension = currentFile.slice(0, currentFile.lastIndexOf('.'));
         var targetFile = '';
-        if (fileIs(currentFile, '.ts', '.scss', '.sass', '.css')) {
+        if (fileIs(currentFile, 'ts', 'scss', 'sass', 'less', 'css')) {
             targetFile = fileNameWithoutExtension + '.html';
         }
         else if (fileIs(currentFile, '.html')) {
@@ -190,7 +190,7 @@ export function activate(context: vscode.ExtensionContext) {
         var currentFile = editor.document.fileName;
         let fileNameWithoutExtension = currentFile.slice(0, currentFile.lastIndexOf('.'));
         var targetFile = '';
-        if (fileIs(currentFile, '.html', '.scss', '.sass', '.css')) {
+        if (fileIs(currentFile, 'html', 'scss', 'sass', 'less', 'css')) {
             targetFile = fileNameWithoutExtension + '.ts';
         }
         else if (fileIs(currentFile, '.ts')) {
@@ -231,7 +231,7 @@ export function activate(context: vscode.ExtensionContext) {
         var currentFile = editor.document.fileName;
         let fileNameWithoutExtension = currentFile.slice(0, currentFile.lastIndexOf('.'));
         var targetFile: string[] = [];
-        if (fileIs(currentFile, 'scss', 'sass', 'css')) {
+        if (fileIs(currentFile, 'scss', 'sass', 'less', 'css')) {
             if (previous && previous !== currentFile) {
                 if (previous.startsWith(fileNameWithoutExtension)) {
                     targetFile.push(previous);
@@ -247,6 +247,7 @@ export function activate(context: vscode.ExtensionContext) {
         else if (fileIs(currentFile, '.ts', '.html')) {
             targetFile.push(fileNameWithoutExtension + '.scss');
             targetFile.push(fileNameWithoutExtension + '.sass');
+            targetFile.push(fileNameWithoutExtension + '.less');
             targetFile.push(fileNameWithoutExtension + '.css');
         }
         else {
