@@ -27,6 +27,9 @@ Easily navigate to `typescript(.ts)`|`template(.html)`|`style(.scss/.sass/.less/
       ```
 
 ## Release Notes
+### 0.1.4(2017-2-15)
+* Add icon.
+
 ### 0.1.3(2017-2-15)
 #### Bug Fixes
 * F12 on component variables using null propagation does not work ([#8](https://github.com/infinity1207/angular2-switcher/issues/8))
