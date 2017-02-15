@@ -27,8 +27,11 @@ Easily navigate to `typescript(.ts)`|`template(.html)`|`style(.scss/.sass/.less/
       ```
 
 ## Release Notes
-### 0.1.2(2016-12-28)
-Add support for .less files for style.
+### 0.1.3(2017-2-15)
+#### Bug Fixes
+* F12 on component variables using null propagation does not work ([#8](https://github.com/infinity1207/angular2-switcher/issues/8))
+* File switching only within focused window editor ([#7](https://github.com/infinity1207/angular2-switcher/issues/7))
+
 
 ## Source
 [GitHub](https://github.com/infinity1207/angular2-switcher)

@@ -22,6 +22,9 @@ class HTMLDefinitionProvider implements vscode.DefinitionProvider {
         return new Promise((resolve, reject) => {
             let range = document.getWordRangeAtPosition(position);
             let word = document.getText(range);
+            if (word.endsWith('?')) {
+                word = word.slice(0, word.length - 1);
+            }
             let wordType = 0;       // 0: property, 1: function
 
             // check word as function or property.
@@ -96,12 +99,12 @@ function fileIs(path: string, ...items: string[]) : boolean {
 }
 
 let previous = '';
-function openTextDocument(path: string): Promise<vscode.TextDocument> {
+function xOpenTextDocument(path: string, viewColumn?: vscode.ViewColumn): Promise<vscode.TextDocument> {
     return new Promise((resolve, reject) =>{
         vscode.workspace.openTextDocument(path)
             .then(
                 (doc) => {
-                    vscode.window.showTextDocument(doc).then(() => {
+                    vscode.window.showTextDocument(doc, viewColumn).then(() => {
                         resolve(doc);
                     }, (err) => {
                         reject(err);
@@ -168,7 +171,7 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
 
-        openTextDocument(targetFile).then(() => {
+        xOpenTextDocument(targetFile, editor.viewColumn).then(() => {
             previous = currentFile;
         }, (err) => {
             console.log(err);
@@ -210,7 +213,7 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
 
-        openTextDocument(targetFile).then(() => {
+        xOpenTextDocument(targetFile, editor.viewColumn).then(() => {
             previous = currentFile;
         }, (err) => {
             // console.log(err);
@@ -254,7 +257,7 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
 
-        var g = gen(targetFile);
+        var g = gen(targetFile, editor.viewColumn);
         function next() {
             var result = g.next();
             if (result.done)
@@ -274,9 +277,9 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(cmdSwitchTemplate, cmdSwitchStyle, cmdSwitchTS);
 }
 
-function* gen(files: string[]) {
+function* gen(files: string[], viewColumn: vscode.ViewColumn) {
     for (var index = 0; index < files.length; index++) {
-        yield openTextDocument(files[index]);
+        yield xOpenTextDocument(files[index], viewColumn);
     }
 }
 
