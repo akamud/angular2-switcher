@@ -2,6 +2,8 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { open } from 'fs';
+import { TextEdit } from 'vscode';
 
 const HTML_MODE: vscode.DocumentFilter = { language: 'html', scheme: 'file' };
 
@@ -18,7 +20,7 @@ const HTML_TAGS: string[] = [
 ];
 
 class HTMLDefinitionProvider implements vscode.DefinitionProvider {
-    public provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken) : Thenable<vscode.Location> {
+    public provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Thenable<vscode.Location> {
         return new Promise((resolve, reject) => {
             let range = document.getWordRangeAtPosition(position);
             let word = document.getText(range);
@@ -50,7 +52,7 @@ class HTMLDefinitionProvider implements vscode.DefinitionProvider {
 
             // find function|property in ts
             let htmlFile = document.fileName;
-            let fileNameWithoutExtension = htmlFile.slice(0, htmlFile.lastIndexOf('.'));
+            let fileNameWithoutExtension = getFileNameWithoutExtension(htmlFile);
             let tsFile = fileNameWithoutExtension + '.ts';
             let tsUri = vscode.Uri.file(tsFile);
             let enterClass = false;
@@ -70,8 +72,7 @@ class HTMLDefinitionProvider implements vscode.DefinitionProvider {
                     }
 
                     let m = line.text.match(rgx);
-                    if (m && m.length > 0)
-                    {
+                    if (m && m.length > 0) {
                         let pos = line.text.indexOf(word);
                         resolve(new vscode.Location(tsUri, new vscode.Position(li, pos)));
                     }
@@ -82,7 +83,7 @@ class HTMLDefinitionProvider implements vscode.DefinitionProvider {
     }
 }
 
-function fileIs(path: string, ...items: string[]) : boolean {
+function fileIs(path: string, ...items: string[]): boolean {
     if (!items) {
         return false;
     }
@@ -98,22 +99,64 @@ function fileIs(path: string, ...items: string[]) : boolean {
     return false;
 }
 
+function fileIsTs(path: string) {
+    if (fileIs(path, 'ts')) {
+        return path.split('.').length === 2;
+    }
+    return false;
+}
+
+function fileIsStyle(path: string) {
+    return fileIs(path, 'scss', 'sass', 'less', 'css');
+}
+
+function fileIsHtml(path: string) {
+    return fileIs(path, 'html');
+}
+
+function fileIsSpec(path: string) {
+    return fileIs(path, 'spec.ts');
+}
+
+function getFileNameWithoutExtension(path: string) {
+    return path.split('.')[0];
+}
+
 let previous = '';
 function xOpenTextDocument(path: string, viewColumn?: vscode.ViewColumn): Promise<vscode.TextDocument> {
-    return new Promise((resolve, reject) =>{
-        vscode.workspace.openTextDocument(path)
-            .then(
+    return new Promise((resolve, reject) => {
+        let opened = false;
+
+        // vscode.workspace.textDocuments.forEach((doc) => {
+        // });
+
+        // try to find opened document.
+        vscode.window.visibleTextEditors.forEach((textEditor) => {
+            if (textEditor.document.fileName === path) {
+                opened = true;
+                vscode.window.showTextDocument(textEditor.document, textEditor.viewColumn).then(() => {
+                    resolve(textEditor.document);
+                }, (err) => {
+                    reject(err);
+                });
+            }
+        });
+
+        if (!opened) {
+            vscode.workspace.openTextDocument(path)
+                .then(
                 (doc) => {
                     vscode.window.showTextDocument(doc, viewColumn).then(() => {
                         resolve(doc);
                     }, (err) => {
                         reject(err);
                     });
-                }, 
+                },
                 (err) => {
                     reject(err);
                 }
-            );
+                );
+        }
     });
 }
 
@@ -142,19 +185,19 @@ export function activate(context: vscode.ExtensionContext) {
         if (!vscode.workspace) {
             return;
         }
-        
+
         var editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
         }
 
         var currentFile = editor.document.fileName;
-        let fileNameWithoutExtension = currentFile.slice(0, currentFile.lastIndexOf('.'));
+        let fileNameWithoutExtension = getFileNameWithoutExtension(currentFile);
         var targetFile = '';
-        if (fileIs(currentFile, 'ts', 'scss', 'sass', 'less', 'css')) {
+        if (fileIsTs(currentFile) || fileIsStyle(currentFile) || fileIsSpec(currentFile)) {
             targetFile = fileNameWithoutExtension + '.html';
         }
-        else if (fileIs(currentFile, '.html')) {
+        else if (fileIsHtml(currentFile)) {
             if (previous && previous !== currentFile) {
                 if (previous.startsWith(fileNameWithoutExtension)) {
                     targetFile = previous;
@@ -184,19 +227,19 @@ export function activate(context: vscode.ExtensionContext) {
         if (!vscode.workspace) {
             return;
         }
-        
+
         var editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
         }
 
         var currentFile = editor.document.fileName;
-        let fileNameWithoutExtension = currentFile.slice(0, currentFile.lastIndexOf('.'));
+        let fileNameWithoutExtension = getFileNameWithoutExtension(currentFile);
         var targetFile = '';
-        if (fileIs(currentFile, 'html', 'scss', 'sass', 'less', 'css')) {
+        if (fileIsHtml(currentFile) || fileIsStyle(currentFile) || fileIsSpec(currentFile)) {
             targetFile = fileNameWithoutExtension + '.ts';
         }
-        else if (fileIs(currentFile, '.ts')) {
+        else if (fileIsTs(currentFile)) {
             if (previous && previous !== currentFile) {
                 if (previous.startsWith(fileNameWithoutExtension)) {
                     targetFile = previous;
@@ -225,16 +268,16 @@ export function activate(context: vscode.ExtensionContext) {
         if (!vscode.workspace) {
             return;
         }
-        
+
         var editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
         }
 
         var currentFile = editor.document.fileName;
-        let fileNameWithoutExtension = currentFile.slice(0, currentFile.lastIndexOf('.'));
+        let fileNameWithoutExtension = getFileNameWithoutExtension(currentFile)
         var targetFile: string[] = [];
-        if (fileIs(currentFile, 'scss', 'sass', 'less', 'css')) {
+        if (fileIsStyle(currentFile)) {
             if (previous && previous !== currentFile) {
                 if (previous.startsWith(fileNameWithoutExtension)) {
                     targetFile.push(previous);
@@ -247,7 +290,7 @@ export function activate(context: vscode.ExtensionContext) {
                 targetFile.push(fileNameWithoutExtension + '.html');
             }
         }
-        else if (fileIs(currentFile, '.ts', '.html')) {
+        else if (fileIsTs(currentFile) || fileIsHtml(currentFile) || fileIsSpec(currentFile)) {
             targetFile.push(fileNameWithoutExtension + '.scss');
             targetFile.push(fileNameWithoutExtension + '.sass');
             targetFile.push(fileNameWithoutExtension + '.less');
@@ -272,6 +315,48 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
         next();
+    });
+
+    // will jump *.spec.ts only current within *.ts 
+    let cmdSwitchSpec = vscode.commands.registerCommand('extension.switchSpec', () => {
+
+        if (!vscode.workspace) {
+            return;
+        }
+
+        var editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+
+        var currentFile = editor.document.fileName;
+        let fileNameWithoutExtension = getFileNameWithoutExtension(currentFile);
+        var targetFile = '';
+        if (fileIsTs(currentFile) || fileIsStyle(currentFile) || fileIsHtml(currentFile)) {
+            targetFile = fileNameWithoutExtension + '.spec.ts';
+        }
+        else if (fileIsSpec(currentFile)) {
+            if (previous && previous !== currentFile) {
+                if (previous.startsWith(fileNameWithoutExtension)) {
+                    targetFile = previous;
+                }
+                else {
+                    targetFile = fileNameWithoutExtension + '.ts';
+                }
+            }
+            else {
+                targetFile = fileNameWithoutExtension + '.ts';
+            }
+        }
+        else {
+            return;
+        }
+
+        xOpenTextDocument(targetFile, editor.viewColumn).then(() => {
+            previous = currentFile;
+        }, (err) => {
+            console.log(err);
+        });
     });
 
     context.subscriptions.push(cmdSwitchTemplate, cmdSwitchStyle, cmdSwitchTS);

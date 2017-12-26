@@ -29,6 +29,10 @@
             {
                 "command": "extension.switchTS",
                 "title": "Open Corresponding typescript(ts) File"
+            },
+            {
+                "command": "extension.switchSpec",
+                "title": "Open Corresponding unit test(spec.ts) File"
             }
         ],
         "keybindings": [
@@ -46,6 +50,11 @@
                 "command": "extension.switchTS",
                 "key": "alt+u",
                 "mac": "shift+alt+u"
+            },
+            {
+                "command": "extension.switchSpec",
+                "key": "alt+p",
+                "mac": "shift+alt+p"
             }
         ]
     },
