@@ -100,26 +100,38 @@ function fileIs(path: string, ...items: string[]): boolean {
 }
 
 function fileIsTs(path: string) {
-    if (fileIs(path, 'ts')) {
-        return path.split('.').length === 2;
+    if (fileIs(path, '.ts')) {
+        let parts = path.split('.');
+        parts.pop();
+        if (parts[parts.length - 1] !== 'spec') {
+            return true;
+        }
     }
     return false;
 }
 
 function fileIsStyle(path: string) {
-    return fileIs(path, 'scss', 'sass', 'less', 'css');
+    return fileIs(path, '.scss', '.sass', '.less', '.css');
 }
 
 function fileIsHtml(path: string) {
-    return fileIs(path, 'html');
+    return fileIs(path, '.html');
 }
 
 function fileIsSpec(path: string) {
-    return fileIs(path, 'spec.ts');
+    return fileIs(path, '.spec.ts');
 }
 
 function getFileNameWithoutExtension(path: string) {
-    return path.split('.')[0];
+
+    let parts = path.split('.');
+    parts.pop();
+    if (parts.length > 1) {
+        if (parts[parts.length - 1] === 'spec') {
+            parts.pop();
+        }
+    }
+    return parts.join('.');
 }
 
 let previous = '';

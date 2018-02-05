@@ -22,7 +22,12 @@ Easily navigate to `typescript(.ts)`|`template(.html)`|`style(.scss/.sass/.less/
         > if on `.spec.ts`: go to previous
 
 ## Release Notes
+### 0.1.6(2018-2-5)
+#### Bug Fixes
+* Not working since 0.15 ([#16](https://github.com/infinity1207/angular2-switcher/issues/16))
+
 ### 0.1.5(2018-2-5)
+#### Bug Fixes
 * Add the possibility to switch to the .spec.ts unit test file associated with the .ts file ([#14](https://github.com/infinity1207/angular2-switcher/issues/14))
 
 ### 0.1.4(2017-2-15)
