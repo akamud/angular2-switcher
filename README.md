@@ -4,27 +4,22 @@ Easily navigate to `typescript(.ts)`|`template(.html)`|`style(.scss/.sass/.less/
 ## Usage
 * Go to the definition of variables/functions when press `f12` within html.
 
-* Switch `.ts`|`.html`|`.scss` fastly. 
-	* `alt+o`(Windows) `shift+alt+o`(macOS)
-      ```
-	  if on ts: go to html
-	  if on css: go to html
-	  if on html: go to previous (ts or css)
-      ```
+* Switch `.ts`|`.html`|`.css`|`.spec.ts` fastly.
+    * `alt+o`(Windows) `shift+alt+o`(macOS)
+        > if on `.ts|.css|.spec.ts`: go to html<br>
+        > if on `.html`: go to previous
 
-	* `alt+i`(Windows) `shift+alt+i`(macOS)
-      ```
-	  if on ts: go to css
-	  if on html: go to css
-	  if on css: go to previous (ts or html)
-      ```
+    * `alt+i`(Windows) `shift+alt+i`(macOS)
+        > if on `.ts|.html|.spec.ts`: go to css<br>
+        > if on `.css`: go to previous
 
-	* `alt+u`(Windows) `shift+alt+u`(macOS)
-      ```
-	  if on css: go to ts
-	  if on html: go to ts
-	  if on ts: go to previous (css or html)
-      ```
+    * `alt+u`(Windows) `shift+alt+u`(macOS)
+        > if on `.css|.html|.spec.ts`: go to ts<br>
+        > if on `ts`: go to previous
+
+    * `alt+p`(Windows) `shift+alt+p`(macOS)
+        > if on `.ts|.css|.html`: go to spec.ts<br>
+        > if on `.spec.ts`: go to previous
 
 ## Release Notes
 ### 0.1.5(2018-2-5)
