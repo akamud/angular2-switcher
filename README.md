@@ -27,6 +27,9 @@ Easily navigate to `typescript(.ts)`|`template(.html)`|`style(.scss/.sass/.less/
       ```
 
 ## Release Notes
+### 0.1.5(2018-2-5)
+* Add the possibility to switch to the .spec.ts unit test file associated with the .ts file ([#14](https://github.com/infinity1207/angular2-switcher/issues/14))
+
 ### 0.1.4(2017-2-15)
 * Add icon.
 
@@ -34,7 +37,6 @@ Easily navigate to `typescript(.ts)`|`template(.html)`|`style(.scss/.sass/.less/
 #### Bug Fixes
 * F12 on component variables using null propagation does not work ([#8](https://github.com/infinity1207/angular2-switcher/issues/8))
 * File switching only within focused window editor ([#7](https://github.com/infinity1207/angular2-switcher/issues/7))
-
 
 ## Source
 [GitHub](https://github.com/infinity1207/angular2-switcher)
